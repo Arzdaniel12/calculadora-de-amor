@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora d'amor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .exercici {
+            background-color: #ffab46;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultat {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        #historial {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora d'amor 🚀</h1>
+    
+    <!-- Exercici 1: Calculadora d'amor -->
+    <div class="exercici">
+        <h2>1. Calculadora d'amor</h2>
+        <p>Escriu dos noms i sabràs el percentatge d'amor ❤️</p><br>
+        <label for="fname">Primer nom:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="lname">Segon nom:</label><br>
+        <input type="text" id="lname" name="lname"><br><br>
+
+        <button onclick="exercici1()">Provar percentatge d'amor </button>
+
+       
+
+
+        <div id="resultat"></div>
+    </div>
+
+    <!-- Historial -->
+    <div id="historial"></div>
+
+    <!-- Borrar historial -->
+    <br>
+    <button onclick="borrarHistorial()">🧹 Borrar historial</button>
+
+    <script>
+        let historial = [];
+
+        function exercici1() {
+            let nom1 = document.getElementById("fname").value.toLowerCase();
+            let nom2 = document.getElementById("lname").value.toLowerCase();
+            let tt = nom1 + nom2;
+            
+            let contador = {};
+            for (let i = 0; i < tt.length; i++) {
+                let lletra = tt[i];
+                if (lletra !== " ") {
+                    contador[lletra] = (contador[lletra] || 0) + 1;
+                }
+            }
+
+            let numeros = Object.values(contador);
+
+            while (numeros.length > 2) {
+                let nous = [];
+                for (let i = 0; i < Math.floor(numeros.length / 2); i++) {
+                    nous.push(numeros[i] + numeros[numeros.length - 1 - i]);
+                }
+                if (numeros.length % 2 !== 0) {
+                    nous.push(numeros[Math.floor(numeros.length / 2)]);
+                }
+                numeros = nous;
+            }
+
+            let resultatFinal = parseInt(numeros.join(""));
+            let textResultat = "Resultat final: " + resultatFinal + "%";
+            if (resultatFinal >= 50) {
+                textResultat += " ❤️";
+            }
+
+            // Mostrar en historial
+            historial.push("Noms: " + nom1 + " i " + nom2 + " - " + textResultat);
+            document.getElementById("resultat").innerHTML = textResultat;
+            document.getElementById("historial").innerHTML = "<strong>Historial:</strong><br>" + historial.join("<br>");
+        }
+
+        function borrarHistorial() {
+            const clave = prompt("Introdueix la contrasenya per esborrar el historial:");
+            if (clave === "arzdaniel") {
+                historial = [];
+                document.getElementById("historial").innerHTML = "<strong>Historial buidat.</strong>";
+            } else {
+                alert("Contrasenya incorrecta");
+            }
+        }
+    </script>
+
+    <footer style="margin-top: 30px; color: #666;">
+        <p>🧬 Aquest percentatge no està científicament comprovat.</p>
+    </footer> 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"64b33a6d0a974373871ee465c90e5b20","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
