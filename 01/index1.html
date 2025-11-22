@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Nutricional - Estético</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Estético y Moderno */
+        :root {
+            --primary-color: #2c974b; /* Verde moderno */
+            --secondary-color: #e6f3e9; /* Verde claro */
+            --text-dark: #333;
+            --text-light: #fff;
+            --shadow-light: 0 6px 15px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 30px 15px;
+            background-color: #f0f2f5; /* Fondo suave */
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: var(--text-light);
+            box-shadow: var(--shadow-light);
+            border-radius: var(--border-radius);
+        }
+
+        h2 {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        /* Estilo del Botón de Subida */
+        #file-input {
+            display: none;
+        }
+        .custom-file-upload {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .custom-file-upload:hover {
+            background-color: #247a3e;
+            transform: translateY(-2px);
+        }
+        .upload-icon {
+            margin-right: 10px;
+            font-size: 1.2em; /* Para el icono de cámara/subida */
+        }
+
+        /* Estilo de Previsualización */
+        #image-area {
+            margin-top: 25px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            display: inline-block; /* Centrar el bloque */
+        }
+        #preview-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 280px;
+            border-radius: 8px;
+            display: none;
+            object-fit: cover;
+        }
+        .separator {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(44, 151, 75, 0.3), rgba(0, 0, 0, 0));
+            margin: 30px 0;
+        }
+
+        /* Estilo de Resultados */
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid var(--secondary-color);
+            border-radius: var(--border-radius);
+            text-align: left;
+            background-color: #fafafa;
+        }
+        .results h3 {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        #analysis-status {
+            font-style: italic;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        #nutrition-data {
+            list-style: none;
+            padding: 0;
+        }
+        #nutrition-data li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+        }
+        #nutrition-data li strong {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        #nutrition-data li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🍽️ Analizador Nutricional Inteligente</h2>
+        <p>Sube una foto de tu plato para obtener un análisis detallado de calorías y macronutrientes.</p>
+
+        <label for="file-input" class="custom-file-upload">
+            <span class="upload-icon">📷</span> Subir o Tomar Foto
+        </label>
+        <input type="file" id="file-input" accept="image/*">
+        
+        <div id="image-area">
+            <img id="preview-img" alt="Previsualización de la comida">
+        </div>
+
+        <hr class="separator">
+
+        <div class="results">
+            <h3>Resultados Nutricionales</h3>
+            <p id="analysis-status">Esperando que se cargue una imagen...</p>
+            <ul id="nutrition-data">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const previewImg = document.getElementById('preview-img');
+        const statusElement = document.getElementById('analysis-status');
+        const nutritionList = document.getElementById('nutrition-data');
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                // Paso 1: Mostrar la previsualización de la imagen
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+                // Paso 2: Ejecutar el análisis (Simulación o Llamada a la API)
+                statusElement.textContent = 'Analizando imagen... Preparando los datos nutricionales.';
+                nutritionList.innerHTML = ''; // Limpiar resultados anteriores
+                
+                // === ZONA CRÍTICA: LLAMADA A LA API ===
+                // **Aquí se implementaría la llamada a la API de IA (LogMeal, Gemini, etc.)**
+                
+                // SIMULACIÓN (Reemplace esto con la llamada real a la API):
+                setTimeout(() => {
+                    statusElement.textContent = '✅ Análisis Completado por IA.';
+                    nutritionList.innerHTML = `
+                        <li><span>Alimento Identificado:</span> <strong>Tazón de Yogur con Fruta y Granola</strong></li>
+                        <li><span>Calorías Estimadas:</span> <strong>320 kcal</strong></li>
+                        <li><span>Proteínas:</span> <strong>25 g</strong></li>
+                        <li><span>Grasas:</span> <strong>12 g</strong></li>
+                        <li><span>Carbohidratos:</span> <strong>30 g</strong></li>
+                    `;
+                }, 3000); // Simula el tiempo de espera del servidor
+                // =====================================
+            }
+        });
+        
+        // La función real 'analyzeImage(file)' para la API sigue comentada, esperando su implementación real.
+        /* async function analyzeImage(imageFile) {
+            // ... (código de la API) ...
+        } 
+        */
+
+    </script>
+</body>
+</html>
